@@ -1,35 +1,20 @@
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../../AuthProvider/AuthProvider";
 import { useContext, useState } from "react";
-import { updateProfile } from "firebase/auth";
+import { sendEmailVerification, updateProfile } from "firebase/auth";
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-
 import validatePassword from "../PasswordValidation/PasswordValidation";
+import { AuthContext } from "../../AuthProvider/AuthProvider";
 
 const Register = () => {
-  const { user } = useContext(AuthContext);
-  const [showPassword, setShowPassword] = useState("");
-  const [registerError, setRegisterError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [registerError, setRegisterError] = useState("");
+  const [success, setSuccess] = useState(null);
   const { createUser } = useContext(AuthContext);
 
   //redirect in profile
   const navigate = useNavigate();
-  //toast
 
-  const registerToast = () => {
-    toast.success("Registration successful!", {
-      position: "top-right",
-      autoClose: 10000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
   const handleRegister = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
@@ -45,11 +30,14 @@ const Register = () => {
     //create user
     createUser(email, password)
       .then((result) => {
-        console.log(result.user);
         //reset data
         e.target.reset();
+        console.log(result.user);
+        setSuccess("You have Successfully Registration");
+
         //redirect in profile
         navigate("/profile");
+
         //Update a user's profile
         updateProfile(result.user, {
           displayName: name,
@@ -57,20 +45,14 @@ const Register = () => {
         }).then(() => {
           console.log("Profile Updated");
         });
-        // Show success toast
+        ////Send a user a verification email
+        sendEmailVerification(result.user).then(() => {
+          alert("Please Check your email for verifi your account ");
+        });
       })
       .catch((error) => {
         console.log(error.message);
-        // Show error toast
-        toast.error(error.message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        setRegisterError(error.message);
       });
   };
   return (
@@ -137,10 +119,8 @@ const Register = () => {
                 <label htmlFor="terms">Accept Terms and Condition</label>
               </div>
               <div className="form-control mt-4">
-                <button
-                  onClick={user && registerToast()}
-                  className="btn btn-primary"
-                >
+                <button type="submit" className="btn btn-primary">
+                  {" "}
                   Sign up
                 </button>
               </div>
@@ -157,10 +137,14 @@ const Register = () => {
                 {registerError}
               </p>
             )}
+            {success && (
+              <p className="text-success mt-2 bg-cyan-200 p-1 rounded">
+                {success}
+              </p>
+            )}
           </div>
         </div>
       </main>
-      <ToastContainer />
     </div>
   );
 };

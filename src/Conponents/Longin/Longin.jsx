@@ -7,6 +7,7 @@ import validatePassword from "../PasswordValidation/PasswordValidation";
 
 const Longin = () => {
   const [registerError, setRegisterError] = useState("");
+  const [success, setSuccess] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { longinUser, signInWithGoogle } = useContext(AuthContext);
   //sign in with google
@@ -14,6 +15,9 @@ const Longin = () => {
     signInWithGoogle()
       .then((result) => {
         console.log(result.user);
+        setSuccess("You have Successfully Login with google");
+        //to go home page after longin
+        navigate("/");
       })
       .catch((error) => {
         console.error(error);
@@ -34,14 +38,16 @@ const Longin = () => {
     //longin
     longinUser(email, password)
       .then((result) => {
-        console.log(result.user);
         //reset data
         e.target.reset();
+        console.log(result.user);
+        setSuccess("You have Successfully Login with google");
         //to go home page after longin
         navigate("/");
       })
       .catch((error) => {
         console.log(error.message);
+        setRegisterError(error.message);
       });
   };
   return (
@@ -108,6 +114,11 @@ const Longin = () => {
             {registerError && (
               <p className="text-secondary mt-2 bg-warning p-1 rounded">
                 {registerError}
+              </p>
+            )}
+            {success && (
+              <p className="text-success mt-2 bg-cyan-200 p-1 rounded">
+                {success}
               </p>
             )}
           </div>
