@@ -10,6 +10,9 @@ const Longin = () => {
   const [success, setSuccess] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const { longinUser, signInWithGoogle } = useContext(AuthContext);
+  //to go home page after longin
+  const navigate = useNavigate();
+
   //sign in with google
   const handleSignWithGoogle = () => {
     signInWithGoogle()
@@ -21,10 +24,9 @@ const Longin = () => {
       })
       .catch((error) => {
         console.error(error);
+        setRegisterError(error.message);
       });
   };
-  //to go home page after longin
-  const navigate = useNavigate();
 
   const handleLongin = (e) => {
     e.preventDefault();
@@ -41,7 +43,11 @@ const Longin = () => {
         //reset data
         e.target.reset();
         console.log(result.user);
-        setSuccess("You have Successfully Login with google");
+        if (result.user.emailVerified) {
+          setSuccess("You have Successfully Login with email");
+        } else {
+          alert("Pleae check your email for verify");
+        }
         //to go home page after longin
         navigate("/");
       })
