@@ -4,7 +4,7 @@ import { AuthContext } from "../../AuthProvider/AuthProvider";
 
 const Header = () => {
   const { user, logOut } = useContext(AuthContext);
-  const handleLongOut = () => {
+  const handleLogOut = () => {
     logOut()
       .then(() => {
         console.log("User Logged out Successfully..");
@@ -67,13 +67,15 @@ const Header = () => {
       <div className="navbar-end">
         {user ? (
           <>
-            <span>{user.email}</span>
-            <a onClick={handleLongOut} className="btn btn-sm">
+            <div>
+              <span>{user.email}</span>
+            </div>
+            <a onClick={handleLogOut} className="btn btn-sm">
               {"SignOut"}
             </a>
           </>
         ) : (
-          <Link to={"/longin"}>Longin</Link>
+          <Link to={"/login"}>Login</Link>
         )}
       </div>
     </div>

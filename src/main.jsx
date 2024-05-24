@@ -10,6 +10,7 @@ import Profile from "./Conponents/Profile/Profile";
 import Longin from "./Conponents/Longin/Longin";
 import Register from "./Conponents/Register/Register";
 import PrivateRoute from "./Conponents/PrivateRoute/PrivateRoute";
+import AuthProvider from "./AuthProvider/AuthProvider";
 
 const router = createBrowserRouter([
   {
@@ -22,10 +23,14 @@ const router = createBrowserRouter([
       },
       {
         path: "/contact",
-        element: <Contact></Contact>,
+        element: (
+          <PrivateRoute>
+            <Contact></Contact>,
+          </PrivateRoute>
+        ),
       },
       {
-        path: "/longin",
+        path: "/login",
         element: <Longin></Longin>,
       },
       {
@@ -54,6 +59,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>
 );

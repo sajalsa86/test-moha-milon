@@ -11,7 +11,7 @@ const PrivateRoute = ({ children }) => {
   if (user) {
     return children;
   }
-  return <Navigate to={"/longin"}></Navigate>;
+  return <Navigate to={"/login"}></Navigate>;
 };
 
 PrivateRoute.propTypes = {
