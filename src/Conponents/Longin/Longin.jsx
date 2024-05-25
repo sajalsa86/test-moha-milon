@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 import { IoMdEye } from "react-icons/io";
@@ -9,7 +9,9 @@ const Longin = () => {
   const [registerError, setRegisterError] = useState("");
   const [success, setSuccess] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { longinUser, signInWithGoogle } = useContext(AuthContext);
+  const { longinUser, signInWithGoogle, passwordResetEmail, logOut } =
+    useContext(AuthContext);
+  const emailRef = useRef(null);
   //to go home page after longin
   const navigate = useNavigate();
 
@@ -19,8 +21,6 @@ const Longin = () => {
       .then((result) => {
         console.log(result.user);
         setSuccess("You have Successfully Login with google");
-        //to go home page after longin
-        navigate("/");
       })
       .catch((error) => {
         console.error(error);
@@ -45,14 +45,35 @@ const Longin = () => {
         console.log(result.user);
         if (result.user.emailVerified) {
           setSuccess("You have Successfully Login with email");
+          //to go home page after longin
+          navigate("/");
         } else {
           alert("Pleae check your email for verify");
+          logOut();
         }
-        //to go home page after longin
-        navigate("/");
       })
       .catch((error) => {
         console.log(error.message);
+        setRegisterError(error.message);
+      });
+  };
+  //forgot password
+  const handleForgotPassword = () => {
+    const email = emailRef.current.value;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!email) {
+      setRegisterError("Please Provide an email");
+      return;
+    } else if (!emailRegex.test(email)) {
+      setRegisterError("Please write a valid email");
+      return;
+    }
+    //send password reset email
+    passwordResetEmail(email)
+      .then(() => {
+        alert("Check Your email for forget Password");
+      })
+      .catch((error) => {
         setRegisterError(error.message);
       });
   };
@@ -73,6 +94,7 @@ const Longin = () => {
                   className="input input-bordered"
                   name="email"
                   id="email"
+                  ref={emailRef}
                   required
                 />
               </div>
@@ -100,6 +122,15 @@ const Longin = () => {
                     )}
                   </span>
                 </div>
+                <label className="label">
+                  <a
+                    onClick={handleForgotPassword}
+                    href="#"
+                    className="label-text-alt link link-hover"
+                  >
+                    Forgot password?
+                  </a>
+                </label>
               </div>
 
               <div className="form-control mt-4">

@@ -7,6 +7,7 @@ import {
   signInWithPopup,
   GoogleAuthProvider,
   signOut,
+  sendPasswordResetEmail,
 } from "firebase/auth";
 import auth from "../Firebase/Firebase.config";
 
@@ -33,6 +34,12 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
+
+  //Send a password reset email
+  const passwordResetEmail = (email) => {
+    setLoading(true);
+    return sendPasswordResetEmail(auth, email);
+  };
   //sing out
   const logOut = () => {
     setLoading(true);
@@ -56,6 +63,7 @@ const AuthProvider = ({ children }) => {
     createUser,
     longinUser,
     signInWithGoogle,
+    passwordResetEmail,
     logOut,
   };
   return (
