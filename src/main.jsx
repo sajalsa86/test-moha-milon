@@ -11,6 +11,7 @@ import Longin from "./Conponents/Longin/Longin";
 import Register from "./Conponents/Register/Register";
 import PrivateRoute from "./Conponents/PrivateRoute/PrivateRoute";
 import AuthProvider from "./AuthProvider/AuthProvider";
+import { HelmetProvider } from "react-helmet-async";
 
 const router = createBrowserRouter([
   {
@@ -59,8 +60,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <HelmetProvider>
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </HelmetProvider>
   </React.StrictMode>
 );

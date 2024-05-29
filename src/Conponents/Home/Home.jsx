@@ -1,6 +1,16 @@
+import { Helmet } from "react-helmet-async";
+
 const Home = () => {
   return (
     <main className="flex-grow flex flex-col items-center justify-center">
+      <Helmet>
+        <title>Home Page</title>
+        <link
+          rel="icon"
+          type="image/svg+xml"
+          href="/src/assets/icons/home-icon.svg"
+        />
+      </Helmet>
       <div className="card w-1/2 bg-base-100 shadow-xl">
         <div className="card-body">
           <h2 className="card-title">Hello, World!</h2>

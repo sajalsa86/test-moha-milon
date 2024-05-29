@@ -5,7 +5,7 @@ import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
 import validatePassword from "../PasswordValidation/PasswordValidation";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
-
+import { Helmet } from "react-helmet-async";
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [registerError, setRegisterError] = useState("");
@@ -57,6 +57,14 @@ const Register = () => {
   };
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-pink-100">
+      <Helmet>
+        <title>Register</title>
+        <link
+          rel="icon"
+          type="image/svg+xml"
+          href="/src/assets/icons/title-svgrepo-com.svg"
+        />
+      </Helmet>
       <main className="flex-grow flex flex-col items-center justify-center">
         <div className="card w-96 bg-pink-200 shadow-xl">
           <div className="card-body">
